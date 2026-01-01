@@ -81,8 +81,8 @@ export const connectDB = async (): Promise<void> => {
 
     // Access connection info from mongoose.connection directly
     const connection = mongoose.connection;
-    const host = connection.host || connection.client?.s?.options?.hosts?.[0]?.host || 'connected';
-    const dbName = connection.name || connection.db?.databaseName || 'revocart';
+    const host = connection.host || 'connected';
+    const dbName = connection.name || 'revocart';
     
     console.log(`✅ MongoDB Connected`);
     console.log(`   Host: ${host}`);
