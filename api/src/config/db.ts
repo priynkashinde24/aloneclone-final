@@ -69,7 +69,7 @@ export const connectDB = async (): Promise<void> => {
     console.log('🔄 Connecting to MongoDB...');
     console.log('   URI:', connectionString.replace(/:[^:@]+@/, ':****@'));
     
-    const conn = await mongoose.connect(connectionString, {
+    await mongoose.connect(connectionString, {
       serverSelectionTimeoutMS: 10000, // 10 seconds timeout (matches error message)
       socketTimeoutMS: 45000, // 45 seconds socket timeout
       connectTimeoutMS: 10000, // 10 seconds connection timeout
@@ -79,8 +79,15 @@ export const connectDB = async (): Promise<void> => {
       minPoolSize: 1, // Maintain at least 1 socket connection
     });
 
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
-    console.log(`   Database: ${conn.connection.name}`);
+    // Access connection info from mongoose.connection directly
+    const connection = mongoose.connection;
+    const host = connection.host || connection.client?.s?.options?.hosts?.[0]?.host || 'connected';
+    const dbName = connection.name || connection.db?.databaseName || 'revocart';
+    
+    console.log(`✅ MongoDB Connected`);
+    console.log(`   Host: ${host}`);
+    console.log(`   Database: ${dbName}`);
+    console.log(`   Ready State: ${connection.readyState} (1=connected)`);
   } catch (error: any) {
     console.error('\n❌ Error connecting to MongoDB:');
     console.error('   Error Code:', error.code || 'UNKNOWN');
