@@ -66,13 +66,15 @@ export const connectDB = async (): Promise<void> => {
       process.exit(1);
     }
 
-    console.log('🔄 Connecting to MongoDB...');
-    console.log('   URI:', connectionString.replace(/:[^:@]+@/, ':****@'));
-    
     // Extract host and database name from connection string for logging
     const uriMatch = connectionString.match(/mongodb\+srv?:\/\/[^@]+@([^\/]+)\/([^?]+)/);
     const hostFromUri = uriMatch ? uriMatch[1] : 'unknown';
     const dbNameFromUri = uriMatch ? uriMatch[2] : 'revocart';
+    
+    console.log('🔄 Connecting to MongoDB...');
+    console.log('   URI:', connectionString.replace(/:[^:@]+@/, ':****@'));
+    console.log('   Host:', hostFromUri);
+    console.log('   Database:', dbNameFromUri);
     
     await mongoose.connect(connectionString, {
       serverSelectionTimeoutMS: 10000, // 10 seconds timeout (matches error message)
@@ -84,14 +86,14 @@ export const connectDB = async (): Promise<void> => {
       minPoolSize: 1, // Maintain at least 1 socket connection
     });
 
-    // Access connection info - use connection properties if available, otherwise use parsed URI
+    // Verify connection
     const connection = mongoose.connection;
-    const host = connection.host || hostFromUri;
-    const dbName = connection.name || dbNameFromUri;
+    const actualHost = connection.host || hostFromUri;
+    const actualDbName = connection.name || connection.db?.databaseName || dbNameFromUri;
     
     console.log(`✅ MongoDB Connected`);
-    console.log(`   Host: ${host}`);
-    console.log(`   Database: ${dbName}`);
+    console.log(`   Host: ${actualHost}`);
+    console.log(`   Database: ${actualDbName}`);
     console.log(`   Ready State: ${connection.readyState} (1=connected)`);
   } catch (error: any) {
     console.error('\n❌ Error connecting to MongoDB:');
