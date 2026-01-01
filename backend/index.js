@@ -26,7 +26,7 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://admin:Priyanka%409
 
 // CORS Origin Configuration - Add your frontend URLs here
 // Simple format example (like the GitHub example):
-//   origin: ["https://deploy-mern-1whq.vercel.app"]
+//   origin: ["https://aloneclone-final-1.vercel.app"]
 //   methods: ["POST", "GET"]
 //   credentials: true
 //
