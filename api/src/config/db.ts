@@ -9,10 +9,10 @@ export const connectDB = async (): Promise<void> => {
       return;
     }
 
-    // Validate MONGODB_URI is set
-    if (!process.env.MONGODB_URI) {
-      const error = new Error('MONGODB_URI environment variable is not set!');
-      console.error('❌ MONGODB_URI environment variable is not set!');
+    // Validate MONGODB_URI is set (use constant which has fallback)
+    if (!MONGODB_URI) {
+      const error = new Error('MONGODB_URI is not set!');
+      console.error('❌ MONGODB_URI is not set!');
       console.error('📝 Please add MONGODB_URI to your environment variables');
       console.error('   Example: MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/revocart');
       // In serverless mode, throw error instead of exiting
@@ -22,8 +22,15 @@ export const connectDB = async (): Promise<void> => {
       process.exit(1);
     }
 
-    // Sanitize and validate connection string
-    let connectionString = process.env.MONGODB_URI.trim();
+    // Warn if using fallback in production
+    if (!process.env.MONGODB_URI && (process.env.VERCEL || process.env.NODE_ENV === 'production')) {
+      console.warn('⚠️  WARNING: MONGODB_URI environment variable is not set!');
+      console.warn('⚠️  Using fallback connection string. This should be set in Vercel Environment Variables.');
+      console.warn('⚠️  Go to: Vercel Dashboard → Settings → Environment Variables → Add MONGODB_URI');
+    }
+
+    // Sanitize and validate connection string (use constant which has fallback)
+    let connectionString = MONGODB_URI.trim();
     
     // Check if MONGODB_URI is a placeholder
     if (connectionString.includes('username:password') || 
@@ -101,8 +108,10 @@ export const connectDB = async (): Promise<void> => {
     console.error('   Error Message:', error.message || 'No message');
     
     // Show the connection string (masked) for debugging
-    const maskedUri = process.env.MONGODB_URI?.replace(/:[^:@]+@/, ':****@') || 'not set';
+    const maskedUri = MONGODB_URI?.replace(/:[^:@]+@/, ':****@') || 'not set';
+    const envVarSet = !!process.env.MONGODB_URI;
     console.error('   Connection String:', maskedUri);
+    console.error('   Env Var Set:', envVarSet ? 'Yes' : 'No (using fallback)');
     
     if (error.code === 'ECONNREFUSED') {
       console.error('\n   ⚠️  Connection refused - trying to connect to localhost:27017');
