@@ -24,11 +24,11 @@ const BACKEND_DEPLOY_URL = 'https://alonecloneweb-application.vercel.app/';
 // MongoDB connection string
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://admin:Priyanka%4098@cluster0.mzws36m.mongodb.net/revocart';
 
-// CORS Origin Configuration - Add your frontend URLs here
-// Simple format example (like the GitHub example):
-//   origin: ["https://aloneclone-final-1.vercel.app"]
-//   methods: ["POST", "GET"]
-//   credentials: true
+ CORS Origin Configuration - Add your frontend URLs here
+ Simple format example (like the GitHub example):
+   origin: ["https://aloneclone-final-75.vercel.app"]
+   methods: ["POST", "GET"]
+   credentials: true
 //
 // Add your project URLs in the array below:
 const corsOrigins = [
@@ -47,7 +47,7 @@ const corsOrigins = [
 // CORS configuration
 const allowedOrigins = [
   'https://aloneclone-final-75.vercel.app'
-  'http://localhost:3001',
+
   ...corsOrigins,
 ].filter(Boolean);
 
