@@ -69,6 +69,11 @@ export const connectDB = async (): Promise<void> => {
     console.log('🔄 Connecting to MongoDB...');
     console.log('   URI:', connectionString.replace(/:[^:@]+@/, ':****@'));
     
+    // Extract host and database name from connection string for logging
+    const uriMatch = connectionString.match(/mongodb\+srv?:\/\/[^@]+@([^\/]+)\/([^?]+)/);
+    const hostFromUri = uriMatch ? uriMatch[1] : 'unknown';
+    const dbNameFromUri = uriMatch ? uriMatch[2] : 'revocart';
+    
     await mongoose.connect(connectionString, {
       serverSelectionTimeoutMS: 10000, // 10 seconds timeout (matches error message)
       socketTimeoutMS: 45000, // 45 seconds socket timeout
@@ -79,10 +84,10 @@ export const connectDB = async (): Promise<void> => {
       minPoolSize: 1, // Maintain at least 1 socket connection
     });
 
-    // Access connection info from mongoose.connection directly
+    // Access connection info - use connection properties if available, otherwise use parsed URI
     const connection = mongoose.connection;
-    const host = connection.host || 'connected';
-    const dbName = connection.name || 'revocart';
+    const host = connection.host || hostFromUri;
+    const dbName = connection.name || dbNameFromUri;
     
     console.log(`✅ MongoDB Connected`);
     console.log(`   Host: ${host}`);
