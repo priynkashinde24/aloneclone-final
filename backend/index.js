@@ -32,10 +32,10 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://admin:Priyanka%409
 //
 // Add your project URLs in the array below:
 const corsOrigins = [
-  'https://alonecloneweb-application.vercel.app',
+ ' https://aloneclone-final-75.vercel.app',
   'https://alonecloneweb-application-3-git-main-alone-clone.vercel.app',
   // Add more origins as needed (uncomment and add your URLs):
-  // 'https://your-frontend.vercel.app',
+  // 'https://your-frontend.vercel.app',https://aloneclone-final-75.vercel.app/
   // 'https://www.yourdomain.com',
   // 'https://app.yourdomain.com',
   ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
@@ -46,7 +46,7 @@ const corsOrigins = [
 
 // CORS configuration
 const allowedOrigins = [
-  'http://localhost:3000',
+  'https://aloneclone-final-75.vercel.app'
   'http://localhost:3001',
   ...corsOrigins,
 ].filter(Boolean);
